@@ -1,0 +1,18 @@
+Package: redditapi
+Title: Interface to the OAuth Reddit API
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Paul",
+           family = "Campbell",
+           role = c("aut", "cre"),
+           email = "pacampbell91@gmail.com",
+           comment = c(ORCID = "0000-0003-1018-6606"))
+Description: Tools to interact with the reddit oauth API in R.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
+Imports: 
+    httr,
+    jsonlite
