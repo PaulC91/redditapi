@@ -16,10 +16,12 @@ knitr::opts_chunk$set(
 # redditapi
 
 <!-- badges: start -->
+
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+
 <!-- badges: end -->
 
-Tools to interact with the reddit oauth API in R.
+Tools to interact with the [Reddit OAuth2 API](https://www.reddit.com/dev/api/) in R.
 
 ## Installation
 
@@ -29,34 +31,34 @@ You can install the development version of redditapi from github:
 remotes::install_github("paulc91/redditapi")
 ```
 
-## Setup reddit API application
+## Setup Reddit API application
 
-To authenticate to use the oath API, you need your own application.
+To authenticate to use the OAuth2 API, you need your own application. The following instructions are based on Reddit's [OAuth2 Quick Start Example](https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example) and *will only work for 'script' type apps, which will ONLY have access to accounts registered as "developers" of the app and require the application to know the user's password*.
 
-- [Create a reddit user account](https://www.reddit.com/register/) (if you don't already have one)
-- [Create API application](https://www.reddit.com/prefs/apps/)
-  - give it a name
-  - select 'script' (an application intended for a single developer)
-  - add a description
-  - provide a redirect URL (this won't actually be used but is required so put something like http://localhost:8080)
-  
-Once created, note the application client_id (below the app name) and secret.
+-   [Create a reddit user account](https://www.reddit.com/register/) (if you don't already have one)
+
+-   [Create API application](https://www.reddit.com/prefs/apps/)
+
+    -   give it a name
+    -   select 'script' (an application intended for a single developer)
+    -   add a description
+    -   provide a redirect URL (this won't actually be used but is required so put something like <http://localhost:8080>)
+
+Once created, note the application client\_id (below the app name) and secret.
 
 ## Store credentials as R environment variables
 
-You will need the client id, secret and name (agent) of your API application, as well as your reddit username and password to authenticate in R. It is a good idea to store these as environment variables using a `.Renviron` file either in your home or project directory. 
+You will need the client id, secret and name (agent) of your API application, as well as your reddit username and password to authenticate in R. It is a good idea to store these as environment variables using an `.Renviron` file either in your home or project directory.
 
 You can generate or edit an `.Renviron` with the `usethis` package function `usethis::edit_r_environ(scope = "user")`. Change the scope to `"project"` to limit the environment variables to the current project you are working in rather than all R sessions for your user.
 
 Add the following to the `.Renviron` file, then save and restart the R session.
 
-```
-REDDIT_CLIENT_ID=your_client_id_here
-REDDIT_SECRET=your_secret_here
-REDDIT_AGENT=your_app_name_here
-REDDIT_USERNAME=your_username_here
-REDDIT_PASSWORD=your_password_here
-```
+    REDDIT_CLIENT_ID=your_client_id_here
+    REDDIT_SECRET=your_secret_here
+    REDDIT_AGENT=your_app_name_here
+    REDDIT_USERNAME=your_username_here
+    REDDIT_PASSWORD=your_password_here
 
 ## Example usage
 
@@ -87,10 +89,12 @@ token <- get_reddit_token(
 
 ### Retrieve post data from a subreddit
 
-Because we have authenticated and are using the oauth api, you can access private subreddits you are a member of.
+Because we have authenticated and are using the OAuth2 api, you can access private subreddits you are a member of.
 
-- `limit` is the number of posts to pull per request (max of 100)
-- `max_pages` is the max number of pages to attempt to pull per request
+-   `limit` is the number of posts to return per page (100 maximum)
+-   `max_pages` is the max number of pages to attempt to pull per request
+
+The total number of items returns will be `limit` \* `max_pages`, or all items in the subreddit if that number is lower.
 
 ```{r}
 # request the 200 most recent posts from the r/ambient music subreddit
@@ -115,5 +119,3 @@ posts_df <-
 
 posts_df
 ```
-
-
