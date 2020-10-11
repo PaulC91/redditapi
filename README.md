@@ -7,9 +7,11 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+
 <!-- badges: end -->
 
-Tools to interact with the reddit oauth API in R.
+Tools to interact with the [Reddit OAuth2
+API](https://www.reddit.com/dev/api/) in R.
 
 ## Installation
 
@@ -19,13 +21,20 @@ You can install the development version of redditapi from github:
 remotes::install_github("paulc91/redditapi")
 ```
 
-## Setup reddit API application
+## Setup Reddit API application
 
-To authenticate to use the oath API, you need your own application.
+To authenticate to use the OAuth2 API, you need your own application.
+The following instructions are based on Reddit’s [OAuth2 Quick Start
+Example](https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example)
+and *will only work for ‘script’ type apps, which will ONLY have access
+to accounts registered as “developers” of the app and require the
+application to know the user’s password*.
 
   - [Create a reddit user account](https://www.reddit.com/register/) (if
     you don’t already have one)
+
   - [Create API application](https://www.reddit.com/prefs/apps/)
+    
       - give it a name
       - select ‘script’ (an application intended for a single developer)
       - add a description
@@ -40,7 +49,7 @@ secret.
 You will need the client id, secret and name (agent) of your API
 application, as well as your reddit username and password to
 authenticate in R. It is a good idea to store these as environment
-variables using a `.Renviron` file either in your home or project
+variables using an `.Renviron` file either in your home or project
 directory.
 
 You can generate or edit an `.Renviron` with the `usethis` package
@@ -86,14 +95,15 @@ token <- get_reddit_token(
 
 ### Retrieve post data from a subreddit
 
-Because we have authenticated and are using the oauth api, you can
+Because we have authenticated and are using the OAuth2 api, you can
 access private subreddits you are a member of.
 
-  - `limit` is the number of posts to pull per request (max of 100)
+  - `limit` is the number of posts to return per page (100 maximum)
   - `max_pages` is the max number of pages to attempt to pull per
     request
 
-<!-- end list -->
+The total number of items returns will be `limit` \* `max_pages`, or all
+items in the subreddit if that number is lower.
 
 ``` r
 # request the 200 most recent posts from the r/ambient music subreddit
@@ -124,15 +134,15 @@ posts_df
 #> # A tibble: 200 x 6
 #>    created_utc         author   title           url           score num_comments
 #>    <dttm>              <chr>    <chr>           <chr>         <int>        <int>
-#>  1 2020-10-10 15:17:57 thepart… "The Parttime … https://yout…     1            1
-#>  2 2020-10-10 13:35:01 Illustr… "G’day, guys! … https://yout…     0            0
-#>  3 2020-10-09 22:25:05 _perdom… "Nate Perdomo … https://yout…     6            1
-#>  4 2020-10-09 21:16:57 dontsta… "dontstaylong … https://dont…     2            0
+#>  1 2020-10-10 22:49:14 zenlear… "Earth Modular… https://www.…     1            0
+#>  2 2020-10-10 15:17:57 thepart… "The Parttime … https://yout…     1            1
+#>  3 2020-10-09 22:25:05 _perdom… "Nate Perdomo … https://yout…     7            1
+#>  4 2020-10-09 21:16:57 dontsta… "dontstaylong … https://dont…     3            0
 #>  5 2020-10-09 17:15:13 laikapr… "Logic Moon - … https://www.…     1            0
 #>  6 2020-10-09 11:10:31 Aksetaka "Aksetaka - Th… https://akse…     1            1
-#>  7 2020-10-09 09:26:32 BobChar… "Yarra | Ambie… https://yout…     2            1
+#>  7 2020-10-09 09:26:32 BobChar… "Yarra | Ambie… https://yout…     3            1
 #>  8 2020-10-08 21:01:13 Rolacruz "Rola Cruz - M… https://yout…     1            0
-#>  9 2020-10-08 18:52:24 Hyloiri… "Anedonia Frag… https://hylo…     7            3
+#>  9 2020-10-08 18:52:24 Hyloiri… "Anedonia Frag… https://hylo…     6            3
 #> 10 2020-10-08 03:11:18 eternal… "\"For this pr… https://room…    12            0
 #> # … with 190 more rows
 ```
